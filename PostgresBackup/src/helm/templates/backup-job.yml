@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.database }}-backup
+spec:
+  schedule: "0 0 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          imagePullSecrets:
+            - name: registry-auth
+          containers:
+            - name: postgres-backup
+              image: "mayope/postgres-ssh-backup:latest"
+              imagePullPolicy: Always
+              envFrom:
+                - secretRef:
+                    name: {{ .Values.sshSecret}}
+              env:
+                - name: PGHOST
+                  value: "{{ .Values.databaseHost }}"
+                - name: PGPORT
+                  value: "5432"
+                - name: PGDATABASE
+                  value: {{ .Values.database }}
+                - name: PGUSER
+                  value: postgres
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.databaseSecretName }}
+                      key: {{ .Values.databaseSecretKey }}
