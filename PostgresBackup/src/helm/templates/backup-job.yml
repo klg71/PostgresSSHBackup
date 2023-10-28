@@ -6,6 +6,7 @@ spec:
   schedule: "0 0 * * *"
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
+  suspend: {{.Values.suspendBackupJob }}
   jobTemplate:
     spec:
       template:
@@ -27,6 +28,8 @@ spec:
                   value: "5432"
                 - name: PGDATABASE
                   value: {{ .Values.database }}
+                - name: SUBDIRECTORY
+                  value: {{ .Values.subdirectory }}
                 - name: PGUSER
                   value: postgres
                 - name: PGPASSWORD

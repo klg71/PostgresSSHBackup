@@ -14,9 +14,9 @@ if [ $? -ne 0 ]; then
 fi
 
 
-sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST -p 23 "mkdir -p /home/backup/$PGDATABASE"
-sshpass -p $SSH_PASSWORD rsync -chavzP -e "ssh -p23" $DUMP_FILE_NAME $SSH_USERNAME@$SSH_HOST:/home/backup/$PGDATABASE || exit 1
-sshpass -p $SSH_PASSWORD rsync -chavzP -e "ssh -p23" $DUMP_FILE_NAME.compressed $SSH_USERNAME@$SSH_HOST:/home/backup/$PGDATABASE || exit 1
+sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST -p 23 "mkdir -p /home/backup/$SUBDIRECTORY$PGDATABASE"
+sshpass -p $SSH_PASSWORD rsync -chavzP -e "ssh -p23" $DUMP_FILE_NAME $SSH_USERNAME@$SSH_HOST:/home/backup/$SUBDIRECTORY$PGDATABASE || exit 1
+sshpass -p $SSH_PASSWORD rsync -chavzP -e "ssh -p23" $DUMP_FILE_NAME.compressed $SSH_USERNAME@$SSH_HOST:/home/backup/$SUBDIRECTORY$PGDATABASE || exit 1
 
 echo 'Successfully Backed Up'
 exit 0
